@@ -2,7 +2,8 @@ import pygame
 from main import WIDTH, HEIGHT, screen, big_font, medium_font
 from pieces import turn_step
 
-def draw_board():
+
+def draw_board() -> None:
     for i in range(32):
         column = i % 4
         row = i // 4
@@ -25,3 +26,22 @@ def draw_board():
             pygame.draw.line(screen, 'black', (0, 100 * i), (800, 100 * i), 2)
             pygame.draw.line(screen, 'black', (100 * i, 0), (100 * i, 800), 2)
         screen.blit(medium_font.render('Forfeit', True, 'black'), (810, 830))
+
+
+def draw_valid(moves: list) -> None:
+    """
+        visually represent valid moves on the screen by drawing small circles
+        using red cirles for white and blue circles for black's turn.
+
+        :param moves: list of valid moves
+        :type moves: list
+    """
+    if turn_step < 2:
+        color = "red"
+    else:
+        color = "blue"
+    for i in range(len(moves)):
+        pygame.draw.circle(screen, color, (moves[i][0] * 100 + 50, moves[i][1] * 100 + 50), 5)
+
+
+

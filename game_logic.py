@@ -1,5 +1,6 @@
 """Piece movement validator"""
 import pygame
+from pieces import white_locations, black_locations, turn_step
 
 def check_options(pieces, locations, turn) -> list:
     """
@@ -25,6 +26,8 @@ def check_options(pieces, locations, turn) -> list:
     for i in range(len(pieces)):
         location = locations[i]
         piece = pieces[i]
+
+        # TODO: Confirm the data type of turn
 
         if piece == "pawn":
             moves_list = check_pawn(location, turn)
@@ -76,7 +79,7 @@ def check_king(position, color):
 def check_queen(position, color):
     """
         Queen can move to any direction and any number of steps.
-        Thus a combinatio of the rook and the bishop.
+        Thus a combination of the rook and the bishop.
     """
     moves_list = check_bishop(position, color)
     second_list = check_rook(position, color)
@@ -111,16 +114,17 @@ def check_bishop(position, color):
         while path:
             if (position[0] + (chain * x), position[1] + (chain * y)) not in friends_list and \
                     0 <= position[0] + (chain * x) <= 7 and 0 <= position[1] + (chain * y) <= 7:
-                        moves_list.append(
-                                (position[0] + (chain * x), position[1] + (chain * y)))
-                    if (position[0] + (chain * x), position[1] + (chain * y)) in enemies_list:
-                        path = False
-                    chain += 1
+                moves_list.append(
+                        (position[0] + (chain * x), position[1] + (chain * y)))
+
+                if (position[0] + (chain * x), position[1] + (chain * y)) in enemies_list:
+                    path = False
+                chain += 1
             else:
                 path = False
     return moves_list
 
-def check_rook(position, color):
+def check_rook(position: list, color: str) -> list:
     moves_list = []
     if color == "white":
         enemies_list = black_locations
@@ -155,4 +159,67 @@ def check_rook(position, color):
             else:
                 path = False
     return moves_list
+
+def check_pawn(postion: list, color: str) -> list:
+    moves_list = []
+    if color == "white":
+        if(position[0], position[1] + 1) not in white_locations and \
+                (position[0], position[1] + 1) not in black_locations and position[1] < 7:
+                    moves_list.append((position[0], position[1] + 1))
+        if(position[0], position[1] + 2) not in black_locations and \
+                (position[0], position[1] + 2) not in black_locations and postion[1] == 1:
+                    moves_list.append((position[0], position[1] + 2))
+        if(position[0] + 1, position[1] + 1) in black_locations:
+            moves_list.append((position[0] + 1, position[1] + 1))
+        if(position[0] - 1, position[1] + 1) in black_locations:
+            moves_list.append((position[0] - 1, position[1] + 1))
+    else:
+        if (position[0], position[1] - 1) not in white_locations and \
+                (position[0], position[1] - 1) not in black_locations and position[1] > 0:
+            moves_list.append((position[0], position[1] - 1))
+        if (position[0], position[1] - 2) not in white_locations and \
+                (position[0], position[1] - 2) not in black_locations and position[1] == 6:
+            moves_list.append((position[0], position[1] - 2))
+        if (position[0] + 1, position[1] - 1) in white_locations:
+            moves_list.append((position[0] + 1, position[1] - 1))
+        if (position[0] - 1, position[1] - 1) in white_locations:
+            moves_list.append((position[0] - 1, position[1] - 1))
+    return moves_list
+
+def check_knight(position: list, color: str) -> list:
+    """
+            (-1, 2)  (1, 2)
+          ___ ___ ___ ___ ___
+         |___|_+_|___|_+_|___|
+(-2,1)   |_+_|___|___|___|_+_|<- (2, 1)
+         |___|___|_k_|___|___|
+(-2,-1)  |_+_|___|___|___|_+_|<- (2, -1)
+         |___|_+_|___|_+_|___|
+               ^       ^
+               |       |  
+            (-1,-2)  (1, -2)
+        Diagram above are the possible coordinates that a knight can jump to.
+    """
+    moves_list = []
+    if color == "white":
+        enemies_list = black_locations
+        friends_list = white_locations
+    else:
+        friends_list = black_locations
+        enemies_list = white_locations
+    targets = [(1, 2), (1, -2), (2, 1), (2, -1),
+               (-1, 2), (-1, -2), (-2, 1), (-2, -1)]
+    for i in range(8):
+        target = (position[0] + targets[i][0], position[1] + targets[i][1])
+        if target not in friends_list and 0 <= target[0] <= 7 and 0 <= target[1] <= 7:
+            moves_list.append(target)
+    return moves_list
+
+def check_valid_moves() -> list:
+    if turn_step < 2:
+        options_list = white_options
+    else:
+        options_list = black_options
+    valid_options = options_list[selection]
+    return valid_options
 
