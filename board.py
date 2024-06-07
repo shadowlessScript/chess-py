@@ -1,7 +1,12 @@
 import pygame
 from main import WIDTH, HEIGHT, screen, big_font, medium_font
-from pieces import turn_step
-
+from pieces import (turn_step, small_white_images,
+                    small_black_images, piece_list,
+                    white_locations, black_locations,
+                    white_pieces, black_pieces,
+                    selection, counter,
+                    captured_pieces_black, captured_pieces_white)
+from main import black_options, white_options # may cause circular importation error
 
 def draw_board() -> None:
     for i in range(32):
@@ -44,4 +49,41 @@ def draw_valid(moves: list) -> None:
         pygame.draw.circle(screen, color, (moves[i][0] * 100 + 50, moves[i][1] * 100 + 50), 5)
 
 
+def draw_captured() -> None:
+    """will display the captured pieces on the right side of the board"""
+
+    for i in range(len(captured_pieces_white)):
+        captured_piece = captured_pieces_white[i]
+        index = piece_list.index[captured_piece]
+        screen.blit(small_black_images[index], (825, 5 + 50 * i))
+
+    for i in range(len(captured_pieces_black)):
+        captured_piece = captured_pieces_black[i]
+        index = piece_list.index(captured_piece)
+        screen.blit(small_white_images[index], (925, 5 + 50 * i))
+
+
+def draw_check() -> None:
+    if turn_step < 2:
+        if "king" in white_pieces:
+            king_index = white_pieces.index("king")
+            king_location = white_locations[king_index]
+            
+            for i in range(len(black_options)):
+                if king_location in black_options[i]:
+                    if counter < 15:
+                        pygame.draw.rect(screen, "dark red", 
+                            [white_locations[king_index][0] * 100 + 1, 
+                             white_locations[king_index][1] * 100 +1, 100, 100], 5)
+    else:
+        if "king" in black_pieces:
+            king_index = black_pieces.index('king')
+            king_location = black_locations[king_index]
+            for i in range(len(white_options)):
+                if king_location in white_options[i]:
+                    if counter < 15:
+                        pygame.draw.rect(screen, 'dark blue', [black_locations[king_index][0] * 100 + 1,
+                                                               black_locations[king_index][1] * 100 + 1, 100, 100], 5)
+                else:
+                    break
 

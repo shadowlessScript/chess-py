@@ -5,13 +5,13 @@
 import pygame
 from io import BytesIO
 import rembg
-from main import screen
+#from main import screen
 
-def remove_bg(path: str) -> bytes:
-    with open(path, "rb") as image_file:
-        image_data = image_file.read()
-    
-    return rembg.remove(image_data)
+
+WIDTH = 1000 
+HEIGHT = 900
+
+screen = pygame.display.set_mode([WIDTH, HEIGHT])
 
 white_pieces = ['rook', 'knight', 'bishop', 'king', 'queen', 'bishop', 'knight', 'rook',
                 'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn']

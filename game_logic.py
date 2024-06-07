@@ -1,8 +1,8 @@
 """Piece movement validator"""
 import pygame
-from pieces import white_locations, black_locations, turn_step
+from pieces import white_locations, black_locations, turn_step, selection
 
-def check_options(pieces, locations, turn) -> list:
+def check_options(pieces: list, locations: list, turn: str) -> list:
     """
         Checks the location a piece, which piece has been selected and
         whose turn it is, and gather its legal moves.
@@ -16,7 +16,7 @@ def check_options(pieces, locations, turn) -> list:
         :param locations: pieces position in the board
         :type locations: list
         :param turn: whose turn is it? black or white.
-        :type turn: int
+        :type turn: str
         :returns: all_moves_lst: list containing a piece's legal moves.
         :rtype: list
     """
@@ -160,14 +160,14 @@ def check_rook(position: list, color: str) -> list:
                 path = False
     return moves_list
 
-def check_pawn(postion: list, color: str) -> list:
+def check_pawn(position: list, color: str) -> list:
     moves_list = []
     if color == "white":
         if(position[0], position[1] + 1) not in white_locations and \
                 (position[0], position[1] + 1) not in black_locations and position[1] < 7:
                     moves_list.append((position[0], position[1] + 1))
         if(position[0], position[1] + 2) not in black_locations and \
-                (position[0], position[1] + 2) not in black_locations and postion[1] == 1:
+                (position[0], position[1] + 2) not in black_locations and position[1] == 1:
                     moves_list.append((position[0], position[1] + 2))
         if(position[0] + 1, position[1] + 1) in black_locations:
             moves_list.append((position[0] + 1, position[1] + 1))
