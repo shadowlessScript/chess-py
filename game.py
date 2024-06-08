@@ -1,9 +1,11 @@
 import pygame
 from main import screen, timer, fps, draw_game_over
 from pieces import (draw_pieces, black_pieces, black_locations,
-                    white_pieces, white_locations, counter, selection, captured_pieces_white, captured_pieces_black, turn_step, game_over)
+                    white_pieces, white_locations, counter, selection,
+                    captured_pieces_white, captured_pieces_black, turn_step,
+                    game_over, winner, valid_moves)
 from board import draw_board, draw_captured, draw_check, draw_valid
-from game_logic import check_options, check_valid_moves
+from game_logic import check_options, check_valid_moves, white_options, black_options
 pygame.init()
 
 running = True

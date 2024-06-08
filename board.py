@@ -6,7 +6,7 @@ from pieces import (turn_step, small_white_images,
                     white_pieces, black_pieces,
                     selection, counter,
                     captured_pieces_black, captured_pieces_white)
-from main import black_options, white_options # may cause circular importation error
+from game_logic import black_options, white_options # may cause circular importation error
 
 def draw_board() -> None:
     for i in range(32):
@@ -40,7 +40,7 @@ def draw_valid(moves: list) -> None:
 
         :param moves: list of valid moves
         :type moves: list
-    """
+   """
     if turn_step < 2:
         color = "red"
     else:
@@ -70,7 +70,7 @@ def draw_check() -> None:
             king_location = white_locations[king_index]
             
             for i in range(len(black_options)):
-                if king_location in black_options[i]:
+                if king_location in black_options[i] and black_options[i] != None:
                     if counter < 15:
                         pygame.draw.rect(screen, "dark red", 
                             [white_locations[king_index][0] * 100 + 1, 

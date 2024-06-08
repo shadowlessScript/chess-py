@@ -1,6 +1,7 @@
 """Piece movement validator"""
 import pygame
-from pieces import white_locations, black_locations, turn_step, selection
+from pieces import (white_locations, black_locations,
+                    turn_step, selection, black_pieces, white_pieces)
 
 def check_options(pieces: list, locations: list, turn: str) -> list:
     """
@@ -76,14 +77,15 @@ def check_king(position, color):
 
     return moves_list
 
-def check_queen(position, color):
+def check_queen(position, color) -> list:
     """
         Queen can move to any direction and any number of steps.
         Thus a combination of the rook and the bishop.
     """
     moves_list = check_bishop(position, color)
     second_list = check_rook(position, color)
-    
+    if len(moves_list) == 0 and len(second_list) == 0:
+        return []
     return moves_list.extend(second_list)
 
 def check_bishop(position, color):
@@ -215,6 +217,8 @@ def check_knight(position: list, color: str) -> list:
             moves_list.append(target)
     return moves_list
 
+black_options = check_options(black_pieces, black_locations, "black")
+white_options = check_options(white_pieces, white_locations, "white")
 def check_valid_moves() -> list:
     if turn_step < 2:
         options_list = white_options

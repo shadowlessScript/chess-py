@@ -5,7 +5,6 @@
 import pygame
 from io import BytesIO
 import rembg
-#from main import screen
 
 
 WIDTH = 1000 
